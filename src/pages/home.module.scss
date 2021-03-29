@@ -1,1 +1,65 @@
-// TODO
+.container {
+  margin: 64px auto 0;
+  max-width: 700px;
+
+  .content {
+    width: 100%;
+    height: 108px;
+
+    h1 {
+      color: var(--text-title);
+      font-style: normal;
+      font-weight: bold;
+      font-size: 1.75rem;
+      line-height: 2.125rem;
+      height: 34px;
+    }
+
+    p {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 1.125rem;
+      line-height: 1.375rem;
+      margin-top: 8px;
+      color: var(--text-description);
+    }
+
+    & + .content {
+      margin-top: 50px;
+    }
+
+    .info {
+      margin-top: 22px;
+      display: flex;
+      width: 264px;
+      height: 20px;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-info);
+
+      svg {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  footer {
+    margin: 66px 0;
+    
+    button {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1.125rem;
+      line-height: 1.375rem;
+      color: #FF57B2;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      transition: filter 200ms;
+
+      &:hover {
+        filter: brightness(0.8);
+      }
+    }
+  }
+}
