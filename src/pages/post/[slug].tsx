@@ -34,7 +34,7 @@ interface PostProps {
 export default function Post({ post }: PostProps) {
   const router = useRouter();
 
-  if(router.isFallback) {
+  if (router.isFallback) {
     return (
       <div className={styles.container}>
         <div><p>Carregando...</p></div>
@@ -45,10 +45,9 @@ export default function Post({ post }: PostProps) {
   const minutesRead = Math.ceil(post.data.content.reduce(
     (acc, value) => acc + (
       (value.heading.split(' ')).length +
-      RichText.asText(post.data.content[0].body).split(' ').length
-      ), 0
+      RichText.asText(value.body).split(' ').length
+    ), 0
   ) / 200)
-
 
   return (
     <>
@@ -65,7 +64,13 @@ export default function Post({ post }: PostProps) {
           <div className={styles.info}>
             <time>
               <FaRegCalendarAlt />
-              {post.first_publication_date}
+              {format(
+                new Date(post.first_publication_date),
+                'dd MMM yyyy',
+                {
+                  locale: ptBR,
+                }
+              )}
             </time>
             <div>
               <FaUser />
@@ -81,10 +86,10 @@ export default function Post({ post }: PostProps) {
               <h1>{content.heading}</h1>
               <div
                 className={styles.postbody}
-                dangerouslySetInnerHTML={{__html: RichText.asHtml(content.body)}}
+                dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body) }}
               />
-          </section>
-        ))}
+            </section>
+          ))}
         </div>
       </main>
     </>
@@ -113,17 +118,12 @@ export const getStaticProps: GetStaticProps = async context => {
   const prismic = getPrismicClient();
 
   const response = await prismic.getByUID('post', String(slug), {});
-
   const post = {
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      {
-        locale: ptBR,
-      }
-    ),
+    uid: response.uid,
+    first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       banner: {
         url: response.data.banner.url
       },

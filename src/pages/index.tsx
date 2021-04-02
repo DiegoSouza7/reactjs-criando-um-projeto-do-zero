@@ -50,13 +50,7 @@ export default function Home({ postsPagination }: HomeProps) {
         const post = response.results.map(post => {
           return {
             uid: post.uid,
-            first_publication_date: format(
-              new Date(post.first_publication_date),
-              "dd MMM' 'yyyy",
-              {
-                locale: ptBR,
-              }
-            ),
+            first_publication_date: post.first_publication_date,
             data: {
               title: post.data.title,
               subtitle: post.data.subtitle,
@@ -76,33 +70,39 @@ export default function Home({ postsPagination }: HomeProps) {
 
   return (
     <>
-    <Header />
-    <main className={commonStyles.container}>
-      {posts.map(post => (
-        <Link key={post.uid} href={`/post/${post.uid}`}>
-          <div className={styles.content}>
-            <h1>{post.data.title}</h1>
-            <p>{post.data.subtitle}</p>
-            <div className={styles.info}>
-              <time>
-                <FaRegCalendarAlt />
-                {post.first_publication_date}
-              </time>
-              <div>
-                <FaUser />
-                {post.data.author}
+      <Header />
+      <main className={commonStyles.container}>
+        {posts.map(post => (
+          <Link key={post.uid} href={`/post/${post.uid}`}>
+            <div className={styles.content}>
+              <h1>{post.data.title}</h1>
+              <p>{post.data.subtitle}</p>
+              <div className={styles.info}>
+                <time>
+                  <FaRegCalendarAlt />
+                  {format(
+                    new Date(post.first_publication_date),
+                    "dd MMM' 'yyyy",
+                    {
+                      locale: ptBR,
+                    }
+                  )}
+                </time>
+                <div>
+                  <FaUser />
+                  {post.data.author}
+                </div>
               </div>
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))}
 
-      {next_page && (<footer className={styles.footer}>
-        <button onClick={handleNewPagePosts}>
-          Carregar mais posts
+        {next_page && (<footer className={styles.footer}>
+          <button onClick={handleNewPagePosts}>
+            Carregar mais posts
         </button>
-      </footer>)}
-    </main>
+        </footer>)}
+      </main>
     </>
   )
 }
@@ -120,13 +120,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const posts = postsResponse.results.map(post => {
     return {
       uid: post.uid,
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        "dd MMM' 'yyyy",
-        {
-          locale: ptBR,
-        }
-      ),
+      first_publication_date: post.first_publication_date,
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,
