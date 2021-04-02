@@ -32,8 +32,13 @@
     align-items: center;
     color: var(--text-info);
 
-    svg {
-      margin-right: 10px;
+    div, time {
+      display: flex;
+      align-items: center;
+      
+      svg {
+        margin-right: 0.5rem;
+      }
     }
   }
 }

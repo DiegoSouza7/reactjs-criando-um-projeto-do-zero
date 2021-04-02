@@ -76,15 +76,15 @@ export default function Home({ postsPagination }: HomeProps) {
   return (
     <main className={commonStyles.container}>
       {posts.map(post => (
-        <Link key={post.uid} href={`/post/`}>
+        <Link key={post.uid} href={`/post/${post.uid}`}>
           <div className={styles.content}>
             <h1>{post.data.title}</h1>
             <p>{post.data.subtitle}</p>
             <div className={styles.info}>
-              <div>
+              <time>
                 <FaRegCalendarAlt />
                 {post.first_publication_date}
-              </div>
+              </time>
               <div>
                 <FaUser />
                 {post.data.author}
