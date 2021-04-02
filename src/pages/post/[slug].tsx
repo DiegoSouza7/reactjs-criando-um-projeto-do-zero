@@ -8,6 +8,7 @@ import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import Prismic from '@prismicio/client'
 import { useRouter } from 'next/router';
+import Header from '../../components/Header';
 
 interface Post {
   first_publication_date: string | null;
@@ -48,8 +49,10 @@ export default function Post({ post }: PostProps) {
       ), 0
   ) / 200)
 
+
   return (
     <>
+      <Header />
       <img
         src={post.data.banner.url}
         alt={`Banner ${post.data.title}`}
@@ -114,7 +117,7 @@ export const getStaticProps: GetStaticProps = async context => {
   const post = {
     first_publication_date: format(
       new Date(response.first_publication_date),
-      "dd MMM' 'yyyy",
+      'dd MMM yyyy',
       {
         locale: ptBR,
       }

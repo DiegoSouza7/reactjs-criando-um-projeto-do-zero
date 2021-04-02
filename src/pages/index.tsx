@@ -1,14 +1,15 @@
-import { GetStaticProps } from 'next';
-import Link from 'next/link'
-import { FaRegCalendarAlt, FaUser } from 'react-icons/fa'
-import Prismic from '@prismicio/client'
+import Prismic from '@prismicio/client';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import { GetStaticProps } from 'next';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { FaRegCalendarAlt, FaUser } from 'react-icons/fa';
+import Header from '../components/Header';
 import { getPrismicClient } from '../services/prismic';
-
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
-import { useEffect, useState } from 'react';
+
 
 interface Post {
   uid?: string;
@@ -74,6 +75,8 @@ export default function Home({ postsPagination }: HomeProps) {
   }
 
   return (
+    <>
+    <Header />
     <main className={commonStyles.container}>
       {posts.map(post => (
         <Link key={post.uid} href={`/post/${post.uid}`}>
@@ -100,6 +103,7 @@ export default function Home({ postsPagination }: HomeProps) {
         </button>
       </footer>)}
     </main>
+    </>
   )
 }
 
