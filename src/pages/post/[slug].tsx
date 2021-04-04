@@ -12,6 +12,7 @@ import Header from '../../components/Header';
 
 interface Post {
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -81,6 +82,16 @@ export default function Post({ post }: PostProps) {
               {minutesRead} min
             </div>
           </div>
+
+          <div className={styles.firstPublicationDate}>
+            {`* editado em ${format(
+                new Date(post.first_publication_date),
+                "'Dia' dd 'de' MMMM', às ' HH:mm'",
+                {
+                  locale: ptBR,
+                }
+              )}`}
+          </div>
           {post.data.content.map((content, index) => (
             <section key={index}>
               <h1>{content.heading}</h1>
@@ -91,6 +102,9 @@ export default function Post({ post }: PostProps) {
             </section>
           ))}
         </div>
+        <div>
+          <h1></h1>
+        </div> 
       </main>
     </>
   )
@@ -121,6 +135,7 @@ export const getStaticProps: GetStaticProps = async context => {
   const post = {
     uid: response.uid,
     first_publication_date: response.first_publication_date,
+    last_publication_date: response.last_publication_date,
     data: {
       title: response.data.title,
       subtitle: response.data.subtitle,
