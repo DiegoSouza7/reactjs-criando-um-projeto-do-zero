@@ -9,6 +9,8 @@ import styles from './post.module.scss';
 import Prismic from '@prismicio/client'
 import { useRouter } from 'next/router';
 import Header from '../../components/Header';
+import Link from 'next/link';
+import Comments from '../../components/Comments'
 
 interface Post {
   first_publication_date: string | null;
@@ -30,9 +32,21 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  prevPost: {
+    uid: string;
+    data: {
+      title: string;
+    };
+  }[];
+  nextPost: {
+    uid: string;
+    data: {
+      title: string;
+    };
+  }[];
 }
 
-export default function Post({ post }: PostProps) {
+export default function Post({ post, nextPost, prevPost }: PostProps) {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -85,12 +99,12 @@ export default function Post({ post }: PostProps) {
 
           <div className={styles.firstPublicationDate}>
             {`* editado em ${format(
-                new Date(post.first_publication_date),
-                "'Dia' dd 'de' MMMM', às ' HH:mm'",
-                {
-                  locale: ptBR,
-                }
-              )}`}
+              new Date(post.first_publication_date),
+              "'Dia' dd 'de' MMMM', às ' HH:mm'",
+              {
+                locale: ptBR,
+              }
+            )}`}
           </div>
           {post.data.content.map((content, index) => (
             <section key={index}>
@@ -102,9 +116,34 @@ export default function Post({ post }: PostProps) {
             </section>
           ))}
         </div>
-        <div>
-          <h1></h1>
-        </div> 
+        <div className={styles.line}></div>
+        <div className={styles.footer}>
+          {prevPost.length > 0 ? (
+            <div>
+              <h1>{prevPost[0].data.title}</h1>
+              <Link href={`/post/${prevPost[0].uid}`}>
+                <a>
+                  Post anterior
+                </a>
+              </Link>
+            </div>
+          ) : (
+            <div></div>
+          )}
+          {nextPost.length > 0 ? (
+            <div>
+              <h1>{nextPost[0].data.title}</h1>
+              <Link href={`/post/${nextPost[0].uid}`}>
+                <a>
+                  Próximo post
+                </a>
+              </Link>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
+        <Comments />
       </main>
     </>
   )
@@ -132,6 +171,25 @@ export const getStaticProps: GetStaticProps = async context => {
   const prismic = getPrismicClient();
 
   const response = await prismic.getByUID('post', String(slug), {});
+  
+  const prevPost = await prismic.query(
+    [Prismic.Predicates.at('document.type', 'post')],
+    {
+      pageSize: 1,
+      after: response.id,
+      orderings: '[document.first_publication_date]',
+    }
+  );
+
+  const nextPost = await prismic.query(
+    [Prismic.Predicates.at('document.type', 'post')],
+    {
+      pageSize: 1,
+      after: response.id,
+      orderings: '[document.last_publication_date desc]',
+    }
+  );
+
   const post = {
     uid: response.uid,
     first_publication_date: response.first_publication_date,
@@ -149,7 +207,9 @@ export const getStaticProps: GetStaticProps = async context => {
 
   return {
     props: {
-      post
+      post,
+      nextPost: nextPost?.results,
+      prevPost: prevPost?.results,
     },
     revalidate: 60 * 30
   }

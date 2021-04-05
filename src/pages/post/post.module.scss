@@ -59,3 +59,41 @@
     }
   }
 }
+
+.line {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgb(63, 63, 63);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  div{
+
+    h1 {
+      max-width: 300px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      color: var(--text-title);
+      font-weight: 700;
+      font-size: 1.5rem;
+      line-height: 2rem;
+      letter-spacing: -0.03125rem;
+    }
+
+    a {
+      font-weight: bold;
+      line-height: 1.5rem;
+      color: #FF57B2;
+      font-size: 1rem;
+    }
+
+    & + div{
+      text-align: right;
+    }
+  }
+}
